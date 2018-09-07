@@ -45,14 +45,14 @@ Clone repository and require webmasterApi.php
 
 ## Usage
 
-###How to use example:
+### How to use example:
 
 1. Before use this code go to https://oauth.yandex.ru/client/new and add new client
 
 2. Create file "example/config.php" by copy "config.example.php". Add client ID and secret code here to use example
 
 
-###How to use webmasterApi class:
+### How to use webmasterApi class:
 
 1. Add client on https://oauth.yandex.ru/client/new page. Don't forget to set up correct return url
 
