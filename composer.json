@@ -1,12 +1,12 @@
 {
-  "name": "yandex/webmaster.api",
+  "name": "hardworm/webmaster.api",
   "description": "Yandex Webmaster Api v3 library",
   "keywords": [
     "yandex",
     "webmaster",
     "api"
   ],
-  "homepage": "https://github.com/yandex/webmaster.api",
+  "homepage": "https://github.com/hardworm/webmaster.api",
   "license": "Mozilla Public License Version 2.0",
   "authors": [
     {
@@ -19,6 +19,11 @@
       "name": "Aleksandr Sidorov",
       "email": "mr@g1k.ru",
       "role": "co-author"
+    },
+    {
+      "name": "Aleksandr Zelenkov",
+      "email": "hardworm@gmail.com",
+      "role": "co-author"
     }
   ],
   "require": {
@@ -26,7 +31,7 @@
   },
   "autoload": {
     "psr-4": {
-      "yandex\\webmaster\\api\\": "src/"
+      "hardworm\\webmaster\\api\\": "src/"
     }
   }
 }

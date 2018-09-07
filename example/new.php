@@ -9,7 +9,7 @@
 // Initializtion: get config and primary classes
 require_once(dirname(__FILE__) . "/.init.php");
 
-use yandex\webmaster\api\webmasterApi;
+use hardworm\webmaster\api\webmasterApi;
 
 // Init webmaster api with your access token
 $wmApi = new webmasterApi($token);

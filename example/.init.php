@@ -1,5 +1,5 @@
 <?php
-use yandex\webmaster\api\webmasterApi;
+use hardworm\webmaster\api\webmasterApi;
 
 $cfg_path = realpath(dirname(__FILE__))."/config.php";
 

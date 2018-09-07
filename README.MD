@@ -14,7 +14,7 @@ add into composer.json
 {
     "require": {
         ...
-        "yandex/webmaster.api": "dev-master"
+        "hardworm/webmaster.api": "dev-master"
         ...
     }
 }
@@ -23,7 +23,7 @@ add into composer.json
 or
 
 ```
-php composer.phar require yandex/webmaster.api "dev-master"
+php composer.phar require hardworm/webmaster.api "dev-master"
 ```
 
 
@@ -33,7 +33,7 @@ Also required prior to placing the package on packagist.org
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/yandex/webmaster.api"
+            "url": "https://github.com/hardworm/webmaster.api"
         }
     ]
     ...
@@ -74,4 +74,4 @@ Methods
 addHost, addOriginalText, addSitemap, checkVerification, curlOpts, dataToString,
 delete, deleteHost, deleteOriginalText, deleteSitemap, errorCritical, get, getAccessToken, getApiUrl,
 getHostInfo, getHostOwners, getHostSitemaps, getHostSummary, getHostUserSitemaps, getHosts, getIndexingHistory,
-getOriginalTexts, getPopularQueries, getTicHistory, getUserID, initApi, post, verifyHost
+getOriginalTexts, getPopularQueries, getTicHistory, getSqiHistory, getUserID, initApi, post, verifyHost

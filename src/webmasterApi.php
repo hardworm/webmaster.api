@@ -9,7 +9,7 @@
  *
  */
 
-namespace yandex\webmaster\api;
+namespace hardworm\webmaster\api;
 
 /**
  * Class webmaster_api
