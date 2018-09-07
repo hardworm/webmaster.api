@@ -58,7 +58,7 @@ class webmasterApi
      *
      * @var string
      */
-    private $apiUrl = 'https://api.webmaster.yandex.net/v3';
+    private $apiUrl = 'https://api.webmaster.yandex.net/v3.2';
 
     /**
      * UserID in webmaster
@@ -717,6 +717,31 @@ class webmasterApi
         }
 
         return $this->get('/hosts/' . $hostID . '/tic-history/', array('date_from' => date(DATE_ATOM, $dateFrom), 'date_to' => date(DATE_ATOM, $dateTo)));
+    }
+
+    /**
+     * Get Sqi history
+     *
+     * Получить историю Икс
+     * По умолчанию - вытаскивается статистика за последний месяц. Период можно изменить передав соответствующие timestamps в параметрах
+     * $date_from и $date_to
+     *
+     * @param $hostID string Host id in webmaster
+     * @param $dateFrom int
+     * @param $dateTo int
+     *
+     * @return object Json
+     */
+    public function getSqiHistory($hostID, $dateFrom = null, $dateTo = null)
+    {
+        if (!$dateFrom) {
+            $dateFrom = strtotime('-1 month');
+        }
+        if (!$dateTo) {
+            $dateTo = time();
+        }
+
+        return $this->get('/hosts/' . $hostID . '/sqi-history/', array('date_from' => date(DATE_ATOM, $dateFrom), 'date_to' => date(DATE_ATOM, $dateTo)));
     }
 
     /**
