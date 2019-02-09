@@ -15,7 +15,7 @@ add into composer.json
 {
     "require": {
         ...
-        "hardworm/webmaster.api": "dev-master"
+        "hardworm/webmaster.api": "1.*"
         ...
     }
 }
