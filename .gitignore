@@ -4,8 +4,10 @@ example/config.php
 
 
 .idea/copyright/profiles_settings.xml
-
+.idea/
 .idea/modules.xml
+
+.idea/php.xml
 
 .idea/vcs.xml
 
@@ -19,3 +21,4 @@ example/config.php
 .idea/webServers.xml
 
 .idea/misc.xml
+/vendor/

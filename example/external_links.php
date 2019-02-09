@@ -13,10 +13,14 @@ use hardworm\webmaster\api\webmasterApi;
 
 // Init webmaster api with your access token
 $wmApi = webmasterApi::initApi($token);
-if (isset($wmApi->error_message)) die($wmApi->error_message);
+if (isset($wmApi->error_message)) {
+    die($wmApi->error_message);
+}
 
 // Get host_id
-if (empty($_REQUEST['host_id'])) webmaster_api_example_tpl::err404();
+if (empty($_REQUEST['host_id'])) {
+    webmaster_api_example_tpl::err404();
+}
 $hostID = $_REQUEST['host_id'];
 
 $info = $wmApi->getHostInfo($hostID);
@@ -25,11 +29,15 @@ $info = webmaster_api_example_tpl::checkHost($info);
 
 $limit = 100;
 $offset = 0;
-if (isset($_GET['offset']) && intval($_GET['offset'])) $offset = intval($_GET['offset']);
+if (isset($_GET['offset']) && intval($_GET['offset'])) {
+    $offset = intval($_GET['offset']);
+}
 $externalLinks = $wmApi->getExternalLinks($hostID, $offset, $limit);
 
 // Если саммари - с ошибкой, это какой-то полтергейст, ибо мы уже проверили факт наличия этого хоста и его верификации
-if (!empty($externalLinks->error_code)) webmaster_api_example_tpl::err500();
+if (!empty($externalLinks->error_code)) {
+    webmaster_api_example_tpl::err500();
+}
 
 // Let's show it
 webmaster_api_example_tpl::init()->header($info->unicode_host_url . ' | External Links');

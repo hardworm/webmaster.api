@@ -1,4 +1,4 @@
-# Yandex Webmaster Api v3 Library
+# Yandex Webmaster Api v3.2 Library
 
 - [Installation](#installation)
     - [Composer](#composer)
@@ -10,6 +10,7 @@
 ### Composer
 
 add into composer.json
+
 ```js
 {
     "require": {
@@ -28,6 +29,7 @@ php composer.phar require hardworm/webmaster.api "dev-master"
 
 
 Also required prior to placing the package on packagist.org
+
 ```js
     ...
     "repositories": [
@@ -59,19 +61,43 @@ Clone repository and require webmasterApi.php
 2. For test you can get temporary Access Token (read comments to method webmasterApi::getAccessToken )
 
 3. If you want to get correct Access Token, you must create authorization code.
-  2.1 Read doc on https://tech.yandex.ru/oauth/doc/dg/reference/web-client-docpage/
-  2.2 Locate your client to https://oauth.yandex.ru/authorize?response_type=code&client_id=[yourclient_id]
-  2.3 Use static method getAccessToken to get access token
-  2.4 Create webmasterApi object with static method webmasterApi::initApi
+    1. Read doc on https://tech.yandex.ru/oauth/doc/dg/reference/web-client-docpage/
+    2. Locate your client to https://oauth.yandex.ru/authorize?response_type=code&client_id=[yourclient_id]
+    3. Use static method getAccessToken to get access token
+    4. Create webmasterApi object with static method webmasterApi::initApi
 
 You can see example/.auth.php to see how it working
 
 4. Enjoy!
 
+### Methods
 
-
-Methods
-addHost, addOriginalText, addSitemap, checkVerification, curlOpts, dataToString,
-delete, deleteHost, deleteOriginalText, deleteSitemap, errorCritical, get, getAccessToken, getApiUrl,
-getHostInfo, getHostOwners, getHostSitemaps, getHostSummary, getHostUserSitemaps, getHosts, getIndexingHistory,
-getOriginalTexts, getPopularQueries, getTicHistory, getSqiHistory, getUserID, initApi, post, verifyHost
+* `addHost`
+* `addOriginalText`
+* `addSitemap`
+* `checkVerification`
+* `curlOpts`
+* `dataToString`
+* `delete`
+* `deleteHost`
+* `deleteOriginalText`
+* `deleteSitemap`
+* `errorCritical`
+* `get`
+* `getAccessToken`
+* `getApiUrl`
+* `getHostInfo`
+* `getHostOwners`
+* `getHostSitemaps`
+* `getHostSummary`
+* `getHostUserSitemaps`
+* `getHosts`
+* `getIndexingHistory`
+* `getOriginalTexts`
+* `getPopularQueries`
+* `getTicHistory`
+* `getSqiHistory`
+* `getUserID`
+* `initApi`
+* `post`
+* `verifyHost`

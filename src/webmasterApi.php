@@ -192,7 +192,6 @@ class webmasterApi
             $context = stream_context_create($opts);
             # отправляем запрос и получаем ответ от сервера
             $response = @file_get_contents($url, 0, $context);
-
         } else {
             return $this->errorCritical('CURL not installed & file_get_contents disabled');
         }
@@ -879,11 +878,15 @@ class webmasterApi
         $response = curl_exec($ch);
         curl_close($ch);
 
-        if (!$response) die('Unknown error in curl');
+        if (!$response) {
+            die('Unknown error in curl');
+        }
 
         $response = json_decode($response);
 
-        if (!is_object($response)) die('Unknown error in curl');
+        if (!is_object($response)) {
+            die('Unknown error in curl');
+        }
 
         return $response;
     }
