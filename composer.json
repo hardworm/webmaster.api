@@ -1,6 +1,6 @@
 {
   "name": "hardworm/webmaster.api",
-  "description": "Yandex Webmaster Api v3 library",
+  "description": "Yandex Webmaster Api v3.2 library",
   "keywords": [
     "yandex",
     "webmaster",
