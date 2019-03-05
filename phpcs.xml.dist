@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<ruleset name="PSR2-webmaster.api">
+<ruleset name="PSR12-webmaster.api">
     <file>src</file>
     <file>tests</file>
 
     <arg name="colors" />
     <arg name="no-cache" />
 
-    <rule ref="PSR2">
+    <rule ref="PSR12">
         <exclude name="Generic.Files.LineLength"/>
     </rule>
 </ruleset>

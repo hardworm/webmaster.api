@@ -33,108 +33,105 @@ if (!empty($queries->error_code)) {
     webmaster_api_example_tpl::err500();
 }
 // Let's show it
-webmaster_api_example_tpl::init()->header($info->unicode_host_url.' | Popular Queries');
+webmaster_api_example_tpl::init()->header($info->unicode_host_url . ' | History');
 ?>
 
 <a href="host.php?host_id=<?=$hostID?>">Общая информация</a>
 
 <div class="hostinfo">
-    <?php if (isset($history->indicators->DOWNLOADED)) { ?>
-        <h2>Загруженные</h2>
-        <span class="hostinfo_item">
+    <?php if (isset($history->indicators)) : ?>
+        <?php foreach ($history->indicators as $httpCode => $states) : ?>
+            <h2>Загруженные со статусом <?= $httpCode ?></h2>
+            <span class="hostinfo_item">
             <table border="1">
                 <tr>
-                <?php foreach ($history->indicators->DOWNLOADED as $pages) { ?>
+                <?php foreach ($states as $state) { ?>
                     <th>
-                        <?= date('Y-m-d', strtotime($pages->date)) ?>
+                        <?= date('Y-m-d', strtotime($state->date)) ?>
                     </th>
                 <?php } ?>
                 </tr>
                 <tr>
-                <?php foreach ($history->indicators->DOWNLOADED as $pages) { ?>
+                <?php foreach ($states as $state) { ?>
                     <td>
-                        <?=$pages->value?>
+                        <?= $state->value ?>
                     </td>
                 <?php } ?>
                 </tr>
             </table>
         </span>
-    <?php } ?>
-
-    <?php if (isset($history->indicators->EXCLUDED)) { ?>
-        <h2>Исключенные</h2>
-        <span class="hostinfo_item">
-            <table border="1">
-                <tr>
-                <?php foreach ($history->indicators->EXCLUDED as $pages) { ?>
-                    <th>
-                        <?= date('Y-m-d', strtotime($pages->date)) ?>
-                    </th>
-                <?php } ?>
-                </tr>
-                <tr>
-                <?php foreach ($history->indicators->EXCLUDED as $pages) { ?>
-                    <td>
-                        <?= $pages->value ?>
-                    </td>
-                <?php } ?>
-                </tr>
-            </table>
-        </span>
-    <?php } ?>
-
-    <?php if (isset($history->indicators->DOWNLOADED)) { ?>
-        <h2>В поиске</h2>
-        <span class="hostinfo_item">
-            <table border="1">
-                <tr>
-                <?php foreach ($history->indicators->SEARCHABLE as $pages) { ?>
-                    <th>
-                        <?= date('Y-m-d', strtotime($pages->date)) ?>
-                    </th>
-                <?php } ?>
-                </tr>
-                <tr>
-                <?php foreach ($history->indicators->SEARCHABLE as $pages) { ?>
-                    <td>
-                        <?= $pages->value ?>
-                    </td>
-                <?php } ?>
-                </tr>
-            </table>
-        </span>
-    <?php } ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
 
     <?php
-    $tic_history = $wmApi->getTicHistory($hostID);
+    $search_history = $wmApi->getSearchUrlHistory($hostID);
 
-    if (isset($tic_history->points)) {
+    if (isset($search_history->history)) :
         ?>
-        <h2>Тиц</h2>
+        <h2>Истории изменения количества страниц в поиске</h2>
         <span class="hostinfo_item">
             <table border="1">
                 <tr>
-                <?php foreach ($tic_history->points as $pages) { ?>
-                    <th>
-                        <?= date('Y-m-d', strtotime($pages->date)) ?>
-                    </th>
-                <?php } ?>
+                    <?php foreach ($search_history->history as $page) { ?>
+                        <th><?= date('Y-m-d', strtotime($page->date))?></th>
+                    <?php } ?>
                 </tr>
                 <tr>
-                <?php foreach ($tic_history->points as $pages) { ?>
-                    <td>
-                        <?= $pages->value ?>
-                    </td>
-                <?php } ?>
+                    <?php foreach ($search_history->history as $page) { ?>
+                        <td><?= $page->value ?></td>
+                    <?php } ?>
                 </tr>
             </table>
         </span>
-    <?php } ?>
+    <?php endif; ?>
+
+    <?php
+    $search_event_history = $wmApi->getSearchUrlEventHistory($hostID);
+
+    if (isset($search_event_history->indicators->APPEARED_IN_SEARCH)) :
+        ?>
+        <h2>Истории появления страниц в поиске</h2>
+        <span class="hostinfo_item">
+            <table border="1">
+                <tr>
+                    <?php foreach ($search_event_history->indicators->APPEARED_IN_SEARCH as $page) { ?>
+                        <th><?= date('Y-m-d', strtotime($page->date))?></th>
+                    <?php } ?>
+                </tr>
+                <tr>
+                    <?php foreach ($search_event_history->indicators->APPEARED_IN_SEARCH as $page) { ?>
+                        <td><?= $page->value ?></td>
+                    <?php } ?>
+                </tr>
+            </table>
+        </span>
+    <?php endif; ?>
+
+    <?php
+    if (isset($search_event_history->indicators->REMOVED_FROM_SEARCH)) :
+        ?>
+    <h2>Истории исключения страниц в поиске</h2>
+    <span class="hostinfo_item">
+            <table border="1">
+                <tr>
+                    <?php foreach ($search_event_history->indicators->REMOVED_FROM_SEARCH as $page) { ?>
+                        <th><?= date('Y-m-d', strtotime($page->date))?></th>
+                    <?php } ?>
+                </tr>
+                <tr>
+                    <?php foreach ($search_event_history->indicators->REMOVED_FROM_SEARCH as $page) { ?>
+                        <td><?= $page->value ?></td>
+                    <?php } ?>
+                </tr>
+            </table>
+        </span>
+    <?php endif; ?>
+
 
     <?php
     $sqi_history = $wmApi->getSqiHistory($hostID);
 
-    if (isset($sqi_history->points)) {
+    if (isset($sqi_history->points)) :
         ?>
         <h2>ИКС</h2>
         <span class="hostinfo_item">
@@ -155,6 +152,6 @@ webmaster_api_example_tpl::init()->header($info->unicode_host_url.' | Popular Qu
                 </tr>
             </table>
         </span>
-    <?php } ?>
+    <?php endif; ?>
 
 </div>

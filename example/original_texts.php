@@ -13,10 +13,14 @@ use hardworm\webmaster\api\webmasterApi;
 
 // Init webmaster api with your access token
 $wmApi = webmasterApi::initApi($token);
-if(isset($wmApi->error_message)) die($wmApi->error_message);
+if (isset($wmApi->error_message)) {
+    die($wmApi->error_message);
+}
 
 // Get host_id
-if(empty($_REQUEST['host_id'])) webmaster_api_example_tpl::err404();
+if (empty($_REQUEST['host_id'])) {
+    webmaster_api_example_tpl::err404();
+}
 $hostID = $_REQUEST['host_id'];
 
 $info = $wmApi->getHostInfo($hostID);
@@ -30,8 +34,8 @@ if (isset($_POST['content'])) {
     $content = $_POST['content'];
     $postOTres = $wmApi->addOriginalText($hostID, $_POST['content']);
 
-    if (!isset($postOTres->error_code)&&isset($postOTres->text_id)) {
-        webmaster_api_example_tpl::redirect('./original_texts.php?host_id='.$hostID."&added=".$postOTres->text_id);
+    if (!isset($postOTres->error_code) && isset($postOTres->text_id)) {
+        webmaster_api_example_tpl::redirect('./original_texts.php?host_id=' . $hostID . "&added=" . $postOTres->text_id);
     } else {
         $addError = true;
     }
@@ -42,7 +46,7 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'true' && !empty($_GET['text_i
     $delOTres = $wmApi->deleteOriginalText($hostID, $_GET['text_id']);
 
     if (empty($delOTres->error_code)) {
-        webmaster_api_example_tpl::redirect('./original_texts.php?host_id='.$hostID."&deleted=true");
+        webmaster_api_example_tpl::redirect('./original_texts.php?host_id=' . $hostID . "&deleted=true");
     }
     die();
 }
@@ -55,7 +59,7 @@ if (!empty($originalTexts->error_code)) {
 }
 
 // Let's show it
-webmaster_api_example_tpl::init()->header($info->unicode_host_url.' | Original texts');
+webmaster_api_example_tpl::init()->header($info->unicode_host_url . ' | Original texts');
 
 // If was error adding text, show info
 if ($addError) {

@@ -36,8 +36,6 @@ namespace hardworm\webmaster\api;
  * Никогда не зашивайте в коде своих программ ID хостов, пользователей и других объектов: Яндекс.Вебмастер имеет право изменить этот формат и они перестанут работать.
  * Тем более не пытайтесь самостоятельно генерировать эти ID - получайте их через функцию getHosts.
  *
- * @author Dmitriy V. Popov <dima@subdomain.ru>
- * @copyright Yandex LLC
  */
 
 class webmasterApi
@@ -58,7 +56,7 @@ class webmasterApi
      *
      * @var string
      */
-    private $apiUrl = 'https://api.webmaster.yandex.net/v3.2';
+    private $apiUrl = 'https://api.webmaster.yandex.net/v4';
 
     /**
      * UserID in webmaster
@@ -92,7 +90,7 @@ class webmasterApi
      * Инициализирует класс работы с апи. Необходимо передать acceetoken, полученный на oauth-сервере Яндекс.
      * Обратите внимание на статический метод getAccessToken(), которую можно использовать для его получения
      *
-     * @param $accessToken string access token from Yandex ouath serverh
+     * @param string $accessToken  Access token from Yandex ouath serverh
      */
     protected function __construct($accessToken)
     {
@@ -110,7 +108,7 @@ class webmasterApi
      *
      * Коорректный способ создания объектов класса: При ошибке возвращает объект со стандартными ошибками.
      *
-     * @param $accessToken string
+     * @param string $accessToken Access token from Yandex ouath serverh
      *
      * @return webmasterApi
      */
@@ -131,7 +129,8 @@ class webmasterApi
      * Простоая обертка, возвращающая правильный путь к ручке API
      * На самом деле все что она делает - дописывает /user/userID/, кроме, непосредственно, ручки /user/
      *
-     * @param $resource string
+     * @param string $resource
+     *
      * @return string
      */
     public function getApiUrl($resource)
@@ -156,8 +155,8 @@ class webmasterApi
      * метода dataToString
      *
      *
-     * @param $resource string Name of api resource
-     * @param $data array Array with request params (useful to CURLOPT_POSTFIELDS: http://php.net/curl_setopt )
+     * @param string $resource  Name of api resource
+     * @param array  $data      Array with request params (useful to CURLOPT_POSTFIELDS: http://php.net/curl_setopt )
      *
      * @return object
      */
@@ -215,8 +214,9 @@ class webmasterApi
      *
      * Выполнение POST-запроса к ручке API. Массив data передается в API как json-объект
      *
-     * @param $resource string Name of api resource
-     * @param $data array Array with request params (useful to CURLOPT_POSTFIELDS: http://php.net/curl_setopt )
+     * @param string $resource  Name of api resource
+     * @param array  $data      Array with request params (useful to CURLOPT_POSTFIELDS: http://php.net/curl_setopt )
+     *
      * @return false|JsonSerializable
      */
     protected function post($resource, $data)
@@ -347,6 +347,7 @@ class webmasterApi
      * Устанавливаем дефолтные необходимые параметры вызова curl
      *
      * @param $ch resource curl
+     *
      * @return true
      */
     protected function curlOpts(&$ch)
@@ -367,7 +368,7 @@ class webmasterApi
      * одна и та же переменная со множеством значений. Например, это актуально для вызова ручки /indexing-history/
      * в которую можно передать множетсво индикаторов, которые мы хотим передать, несколько раз задав параметр запроса indexing_indicator
      *
-     * @param $data array
+     * @param array $data
      * @return string
      */
     private function dataToString($data)
@@ -393,8 +394,8 @@ class webmasterApi
     /**
      * Save error message and return false
      *
-     * @param $message string Text of message
-     * @param $json boolean return false as json error
+     * @param string  $message  Text of message
+     * @param boolean $json     Return false as json error
      *
      * @return false|object
      */
@@ -416,8 +417,8 @@ class webmasterApi
     /**
      * Save and log notice message and return false
      *
-     * @param $message string Text of message
-     * @param $json boolean return false as json error
+     * @param string  $message  Text of message
+     * @param boolean $json     Return false as json error
      *
      * @return false|object
      */
@@ -441,6 +442,8 @@ class webmasterApi
      *
      * Узнать userID для текущего токена. Метод вызывается при инициализации класса, и не нужен 'снаружи':
      * Текущего пользователя можно получить через публичное свойство userID
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/user-docpage/
      *
      * @return int|false
      */
@@ -467,7 +470,10 @@ class webmasterApi
      * но, в случае ошибки - объект будет содержать свойства error_code и error_message
      * В случае успеха - это будет объект со свойством host_id, содержащим ID хоста
      *
-     * @param $url string
+     * @param string $url
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/hosts-add-site-docpage/
+     *
      * @return object Json
      */
     public function addHost($url)
@@ -481,7 +487,10 @@ class webmasterApi
      *
      * Удаление хоста из вебмастера. hostID - ID хоста, полученный функцией getHosts
      *
-     * @param $hostID string
+     * @param string $hostID
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/hosts-delete-docpage/
+     *
      * @return object
      */
     public function deleteHost($hostID)
@@ -496,6 +505,8 @@ class webmasterApi
      * Получить список всех хостов добавленных в вебмастер для текущего пользователя.
      * Возвращается массив объектов, каждый из которых содержит данные об отдельном хосте
      *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/hosts-docpage/
+     *
      * @return object Json
      */
     public function getHosts()
@@ -508,7 +519,10 @@ class webmasterApi
      *
      * Проверяем статус верификации хоста
      *
-     * @param $hostID string ID of host
+     * @param string $hostID ID of host
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-verification-get-docpage/
+     *
      * @return object
      */
     public function checkVerification($hostID)
@@ -520,13 +534,15 @@ class webmasterApi
     /**
      * Start verification of host
      *
-     *
      * Запуск процедуры верификации хоста. Обратите внимание, если запустить эту функцию для хоста, который находится
      * в процесс верификации, или же уже верифицирован - метод вернет объект с ошибкой. Проверить статус верификации можно с помощью метода
      * checkVerification
      *
-     * @param $hostID string id of host
-     * @param $type type of verification (DNS|HTML_FILE|META_TAG|WHOIS): get it from applicable_verifiers method of checkVerification return
+     * @param string $hostID Id of host
+     * @param string $type   Type of verification (DNS|HTML_FILE|META_TAG|WHOIS): get it from applicable_verifiers method of checkVerification return
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-verification-post-docpage/
+     *
      * @return false|object
      */
     public function verifyHost($hostID, $type)
@@ -534,13 +550,14 @@ class webmasterApi
         return $this->post('/hosts/' . $hostID . '/verification/?verification_type=' . $type, array());
     }
 
-
     /**
      * Get host info
      *
      * Получить подробную информацию об отдельном хосте
      *
-     * @param $hostID string Host id in webmaster
+     * @param string $hostID Host id in webmaster
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/hosts-id-docpage/
      *
      * @return object Json
      */
@@ -549,13 +566,14 @@ class webmasterApi
         return $this->get('/hosts/' . $hostID . '/');
     }
 
-
     /**
      * Get host summary info
      *
      * Метод позволяет получить подробную информацию об отдельном хосте, включая его ключевые показатели индексирования.
      *
-     * @param $hostID string Host id in webmaster
+     * @param string $hostID Host id in webmaster
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-id-summary-docpage/
      *
      * @return object Json
      */
@@ -564,13 +582,14 @@ class webmasterApi
         return $this->get('/hosts/' . $hostID . '/summary/');
     }
 
-
     /**
      * Get host owners
      *
      * Метод позволяет узнать всех владельцев хоста, и, для каждого из них узнать uid и метод верификации
      *
-     * @param $hostID string Host id in webmaster
+     * @param string $hostID Host id in webmaster
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-owners-get-docpage/
      *
      * @return object Json
      */
@@ -589,8 +608,10 @@ class webmasterApi
      * Обратите внимание: Метод не возвращает те файлы, которые добавлены через Яндекс.Вебмастер но еще не используются
      * при обходе. Для получения списка этих файлов используйте метод getHostUserSitemaps
      *
-     * @param $hostID string Host id in webmaster
-     * @param $parentID string Id of parent sitemap
+     * @param string $hostID   Host id in webmaster
+     * @param string $parentID Id of parent sitemap
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-sitemaps-get-docpage/
      *
      * @return object Json
      */
@@ -610,7 +631,9 @@ class webmasterApi
      *
      * Метод позволяет получить список все файлов sitemap, добавленных через Яндекс.Вебмастер или API
      *
-     * @param $hostID string Host id in webmaster
+     * @param string $hostID Host id in webmaster
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-user-added-sitemaps-get-docpage/
      *
      * @return object Json
      */
@@ -624,8 +647,10 @@ class webmasterApi
      *
      * Добаление новой карты сайта
      *
-     * @param $hostID string Host id in webmaster
-     * @param $url string URL with new sitemap
+     * @param string $hostID Host id in webmaster
+     * @param string $url    URL with new sitemap
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-user-added-sitemaps-post-docpage/
      *
      * @return object
      */
@@ -643,8 +668,10 @@ class webmasterApi
      *
      * Файлы добавленные через robots.txt удалить этим методом нельзя.
      *
-     * @param $hostID string Host id in webmaster
-     * @param $sitemapId string sitemap ID
+     * @param string $hostID     Host id in webmaster
+     * @param string $sitemapId  Sitemap ID
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-user-added-sitemaps-sitemap-id-delete-docpage/
      *
      * @return object Json
      */
@@ -657,21 +684,18 @@ class webmasterApi
     /**
      * Get Indexing history
      *
-     * Получить историю индексирования хоста. В массиве $indexing_indicators можно передать список тех показателей, которые интересуют:
-     * DOWNLOADED  - загруженные страницы
-     * EXCLUDED - исключенные страницы
-     * SEARCHABLE - страницы в поиске
      * По умолчанию - вытаскивается статистика за последний месяц. Период можно изменить передав соответствующие timestamps в параметрах
      * $date_from и $date_to
      *
-     * @param $hostID string Host id in webmaster
-     * @param $indexing_indicators array('DOWNLOADED','EXCLUDED','SEARCHABLE',...)
-     * @param $dateFrom int Date from in timestamp
-     * @param $dateTo int Date to in timestamp
+     * @param string   $hostID   Host id in webmaster
+     * @param int|null $dateFrom Date from in timestamp
+     * @param int|null $dateTo   Date to in timestamp
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/hosts-indexing-history-docpage/
      *
      * @return object Json
      */
-    public function getIndexingHistory($hostID, $indexing_indicators = array('DOWNLOADED', 'EXCLUDED', 'SEARCHABLE',), $dateFrom = null, $dateTo = null)
+    public function getIndexingHistory($hostID, $dateFrom = null, $dateTo = null)
     {
         if (!$dateFrom) {
             $dateFrom = strtotime('-1 month');
@@ -679,34 +703,59 @@ class webmasterApi
         if (!$dateTo) {
             $dateTo = time();
         }
-        if (!intval($dateTo) || !$dateTo) {
+        if (!is_int($dateTo) || !$dateTo) {
             return $this->errorCritical("Bad timestamp to {$dateTo}");
         }
-        if (!intval($dateFrom) || !$dateFrom) {
+        if (!is_int($dateFrom) || !$dateFrom) {
             return $this->errorCritical("Bad timestamp to {$dateFrom}");
         }
         if ($dateTo < $dateFrom) {
             return $this->errorCritical("Date to can't be smaller then Date from");
         }
 
-        return $this->get('/hosts/' . $hostID . '/indexing-history/', array('indexing_indicator' => $indexing_indicators, 'date_from' => date(DATE_ATOM, $dateFrom), 'date_to' => date(DATE_ATOM, $dateTo)));
+        return $this->get('/hosts/' . $hostID . '/indexing/history/', array('date_from' => date(DATE_ATOM, $dateFrom), 'date_to' => date(DATE_ATOM, $dateTo)));
     }
 
-
     /**
-     * Get Tic history
+     * Get samples of loaded pages
      *
-     * Получить историю Тиц
-     * По умолчанию - вытаскивается статистика за последний месяц. Период можно изменить передав соответствующие timestamps в параметрах
-     * $date_from и $date_to
+     * Возвращает URL страниц, участвующих в результатах поиска — до 50 000
      *
-     * @param $hostID string Host id in webmaster
-     * @param $dateFrom int
-     * @param $dateTo int
+     * @param string $hostID Host id in webmaster
+     * @param int    $offset Offset list. The minimum value is 0
+     * @param int    $limit  The size of the page (1-100)
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/hosts-indexing-samples-docpage/
      *
      * @return object Json
      */
-    public function getTicHistory($hostID, $dateFrom = null, $dateTo = null)
+    public function getIndexingSamples($hostID, $offset = 0, $limit = 100)
+    {
+        if (!is_int($offset)) {
+            return $this->errorCritical("Bad offset to {$offset}");
+        }
+
+        if (!is_int($limit)) {
+            return $this->errorCritical("Bad limit to {$limit}");
+        }
+
+        return $this->get('/hosts/' . $hostID . '/indexing/samples/', array('offset' => $offset, 'limit' => $limit));
+    }
+
+    /**
+     * Getting the history of changing the number of pages in the search
+     *
+     * Возвращает количество страниц в поиске за определенный период времени. По умолчанию возвращаются данные за текущий месяц.
+     *
+     * @param string   $hostID   Host id in webmaster
+     * @param int|null $dateFrom Date from in timestamp
+     * @param int|null $dateTo   Date to in timestamp
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/hosts-indexing-insearch-history-docpage/
+     *
+     * @return object Json
+     */
+    public function getSearchUrlHistory($hostID, $dateFrom = null, $dateTo = null)
     {
         if (!$dateFrom) {
             $dateFrom = strtotime('-1 month');
@@ -714,8 +763,213 @@ class webmasterApi
         if (!$dateTo) {
             $dateTo = time();
         }
+        if (!is_int($dateTo)) {
+            return $this->errorCritical("Bad timestamp to {$dateTo}");
+        }
+        if (!is_int($dateFrom)) {
+            return $this->errorCritical("Bad timestamp to {$dateFrom}");
+        }
+        if ($dateTo < $dateFrom) {
+            return $this->errorCritical("Date to can't be smaller then Date from");
+        }
 
-        return $this->get('/hosts/' . $hostID . '/tic-history/', array('date_from' => date(DATE_ATOM, $dateFrom), 'date_to' => date(DATE_ATOM, $dateTo)));
+        return $this->get('/hosts/' . $hostID . '/search-urls/in-search/history/', array('date_from' => date(DATE_ATOM, $dateFrom), 'date_to' => date(DATE_ATOM, $dateTo)));
+    }
+
+    /**
+     * Getting sample pages in a search
+     *
+     * Возвращает URL страниц, участвующих в результатах поиска — до 50 000.
+     *
+     * @param string $hostID Host id in webmaster
+     * @param int    $offset Offset list. The minimum value is 0
+     * @param int    $limit  The size of the page (1-100)
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/hosts-indexing-insearch-samples-docpage/#hosts-indexing-insearch-samples
+     *
+     * @return object Json
+     */
+    public function getSearchUrlSamples($hostID, $offset = 0, $limit = 100)
+    {
+        if (!is_int($offset)) {
+            return $this->errorCritical("Bad offset to {$offset}");
+        }
+
+        if (!is_int($limit) || $limit > 100 || $limit < 0) {
+            return $this->errorCritical("Bad limit to {$limit}");
+        }
+
+        return $this->get('/hosts/' . $hostID . '/search-urls/in-search/samples/', array('offset' => $offset, 'limit' => $limit));
+    }
+
+    /**
+     * Getting the history of the appearance and exclusion of pages from the search
+     *
+     * Возвращает количество страниц, появившихся в поиске и исключенных из него, за определенный период. По умолчанию возвращаются данные за 1 месяц
+     *
+     * @param string   $hostID   Host id in webmaster
+     * @param null|int $dateFrom Date from in timestamp
+     * @param null|int $dateTo   Date to in timestamp
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/hosts-search-events-history-docpage/#hosts-search-events-history
+     *
+     * @return object Json
+     */
+    public function getSearchUrlEventHistory($hostID, $dateFrom = null, $dateTo = null)
+    {
+        if (!$dateFrom) {
+            $dateFrom = strtotime('-1 month');
+        }
+        if (!$dateTo) {
+            $dateTo = time();
+        }
+        if (!is_int($dateTo)) {
+            return $this->errorCritical("Bad timestamp to {$dateTo}");
+        }
+        if (!is_int($dateFrom)) {
+            return $this->errorCritical("Bad timestamp to {$dateFrom}");
+        }
+        if ($dateTo < $dateFrom) {
+            return $this->errorCritical("Date to can't be smaller then Date from");
+        }
+
+        return $this->get('/hosts/' . $hostID . '/search-urls/events/history/', array('date_from' => date(DATE_ATOM, $dateFrom), 'date_to' => date(DATE_ATOM, $dateTo)));
+    }
+
+    /**
+     * View examples of appeared and deleted pages from the search
+     *
+     * Возвращает URL страниц, появившихся в поиске или исключенных из него — до 50 000.
+     *
+     * @param string $hostID Host id in webmaster
+     * @param int    $offset Offset list. The minimum value is 0
+     * @param int    $limit  The size of the page (1-100)
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/hosts-search-events-samples-docpage/#hosts-search-events-samples
+     *
+     * @return object Json
+     */
+    public function getSearchUrlEventHistorySamples($hostID, $offset = 0, $limit = 100)
+    {
+        if (!is_int($offset)) {
+            return $this->errorCritical("Bad offset to {$offset}");
+        }
+
+        if (!is_int($limit) || $limit > 100 || $limit < 0) {
+            return $this->errorCritical("Bad limit to {$limit}");
+        }
+
+        return $this->get('/hosts/' . $hostID . '/search-urls/events/history/', array('offset' => $offset, 'limit' => $limit));
+    }
+
+    /**
+     * Site Diagnostics
+     *
+     * Возвращает информацию об ошибках на сайте
+     *
+     * @param string $hostID Host id in webmaster
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-diagnostics-get-docpage/#host-diagnostics-get
+     *
+     * @return object
+     */
+    public function getDiagnostics($hostID)
+    {
+        return $this->get('/hosts/' . $hostID . '/diagnostics/');
+    }
+
+    /**
+     * Retrieving a list of rescheduling tasks
+     *
+     * Возвращает список задач на переобход страниц сайта.
+     *
+     * @param string   $hostID   Host id in webmaster
+     * @param null|int $dateFrom Date from in timestamp
+     * @param null|int $dateTo   Date to in timestamp
+     * @param int      $offset   Offset list. The minimum value is 0
+     * @param int      $limit    The size of the page (1-100)
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-recrawl-get-docpage/#host-recrawl-get
+     *
+     * @return object
+     */
+    public function getQueueRecrawl($hostID, $dateFrom = null, $dateTo = null, $offset = 0, $limit = 100)
+    {
+        if (!$dateFrom) {
+            $dateFrom = strtotime('-1 month');
+        }
+        if (!$dateTo) {
+            $dateTo = time();
+        }
+        if (!is_int($dateTo)) {
+            return $this->errorCritical("Bad timestamp to {$dateTo}");
+        }
+        if (!is_int($dateFrom)) {
+            return $this->errorCritical("Bad timestamp to {$dateFrom}");
+        }
+        if ($dateTo < $dateFrom) {
+            return $this->errorCritical("Date to can't be smaller then Date from");
+        }
+
+        if (!is_int($offset)) {
+            return $this->errorCritical("Bad offset to {$offset}");
+        }
+
+        if (!is_int($limit) || $limit > 100 || $limit < 0) {
+            return $this->errorCritical("Bad limit to {$limit}");
+        }
+
+        return $this->get('/hosts/' . $hostID . '/recrawl/queue/', array('offset' => $offset, 'limit' => $limit, 'date_from' => date(DATE_ATOM, $dateFrom), 'date_to' => date(DATE_ATOM, $dateTo)));
+    }
+
+    /**
+     * Adding a site page to rerun
+     *
+     * Отправляет URL на переобход
+     *
+     * @param string $hostID Host id in webmaster
+     * @param string $url    URL of the page being sent for rerun
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-recrawl-post-docpage/#host-recrawl-post
+     *
+     * @return object
+     */
+    public function addQueueRecrawl($hostID, $url)
+    {
+        return $this->post('/hosts/' . $hostID . '/recrawl/queue/', array('url' => $url));
+    }
+
+    /**
+     * Check quota for overshoot
+     *
+     * Возвращает суточную квоту на переобход страниц сайта
+     *
+     * @param string $hostID Host id in webmaster
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-recrawl-quota-get-docpage/#host-recrawl-quota-get
+     *
+     * @return object
+     */
+    public function getQuotaRecrawl($hostID)
+    {
+        return $this->get('/hosts/' . $hostID . '/recrawl/quota/');
+    }
+
+    /**
+     * Checking the status of a rescheduling task
+     *
+     * Вовзращает статус задачи на переобход страницы сайта
+     *
+     * @param string $hostID Host id in webmaster
+     * @param string $taskID Relocation task ID
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-recrawl-task-get-docpage/#host-recrawl-task-get
+     *
+     * @return object
+     */
+    public function getStateRecrawlQueue($hostID, $taskID)
+    {
+        return $this->get('/hosts/' . $hostID . '/recrawl/queue/' . $taskID);
     }
 
     /**
@@ -725,9 +979,11 @@ class webmasterApi
      * По умолчанию - вытаскивается статистика за последний месяц. Период можно изменить передав соответствующие timestamps в параметрах
      * $date_from и $date_to
      *
-     * @param $hostID string Host id in webmaster
-     * @param $dateFrom int
-     * @param $dateTo int
+     * @param string   $hostID   Host id in webmaster
+     * @param int|null $dateFrom Date from in timestamp
+     * @param int|null $dateTo   Date to in timestamp
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/sqi-history-docpage/
      *
      * @return object Json
      */
@@ -739,6 +995,15 @@ class webmasterApi
         if (!$dateTo) {
             $dateTo = time();
         }
+        if (!is_int($dateTo)) {
+            return $this->errorCritical("Bad timestamp to {$dateTo}");
+        }
+        if (!is_int($dateFrom)) {
+            return $this->errorCritical("Bad timestamp to {$dateFrom}");
+        }
+        if ($dateTo < $dateFrom) {
+            return $this->errorCritical("Date to can't be smaller then Date from");
+        }
 
         return $this->get('/hosts/' . $hostID . '/sqi-history/', array('date_from' => date(DATE_ATOM, $dateFrom), 'date_to' => date(DATE_ATOM, $dateTo)));
     }
@@ -748,8 +1013,10 @@ class webmasterApi
      *
      * Получение истории изменения количества внешних ссылок на сайт
      *
-     * @param $hostID string Host id in webmaster
-     * @param $indicator string - Индикатор количества внешних ссылок
+     * @param string $hostID    Host id in webmaster
+     * @param string $indicator Number of external links indicator
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-links-external-history-docpage/
      *
      * @return object Json
      */
@@ -758,15 +1025,16 @@ class webmasterApi
         return $this->get('/hosts/' . $hostID . '/links/external/history/', array('indicator' => $indicator));
     }
 
-
     /**
      * Get TOP-500 popular queries from host
      *
      * Получить TOP-500 популярных запросов.
      *
-     * @param $hostID string Host id in webmaster
-     * @param $orderBy string ordering: TOTAL_CLICKS|TOTAL_SHOWS
-     * @param $indicators array('TOTAL_SHOWS','TOTAL_CLICKS','AVG_SHOW_POSITION','AVG_CLICK_POSITION')
+     * @param string $hostID     Host id in webmaster
+     * @param string $orderBy    Ordering: TOTAL_CLICKS|TOTAL_SHOWS
+     * @param array  $indicators array('TOTAL_SHOWS','TOTAL_CLICKS','AVG_SHOW_POSITION','AVG_CLICK_POSITION')
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-search-queries-popular-docpage/
      *
      * @return object Json
      */
@@ -775,23 +1043,31 @@ class webmasterApi
         return $this->get('/hosts/' . $hostID . '/search-queries/popular/', array('order_by' => $orderBy, 'query_indicator' => $indicators));
     }
 
-
     /**
      * Get original texts from host
      *
      * Получить список всех оригинальных текстов для заданного хоста.
      *
-     * @param $hostID string Host id in webmaster
-     * @param $offset int
-     * @param $limit int
+     * @param string $hostID Host id in webmaster
+     * @param int    $offset
+     * @param int    $limit
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-original-texts-get-docpage/
      *
      * @return object Json
      */
     public function getOriginalTexts($hostID, $offset = 0, $limit = 100)
     {
+        if (!is_int($offset)) {
+            return $this->errorCritical("Bad offset to {$offset}");
+        }
+
+        if (!is_int($limit) || $limit > 100 || $limit < 0) {
+            return $this->errorCritical("Bad limit to {$limit}");
+        }
+
         return $this->get('/hosts/' . $hostID . '/original-texts/', array('offset' => $offset, 'limit' => $limit));
     }
-
 
     /**
      * Add new original text to host
@@ -800,8 +1076,10 @@ class webmasterApi
      * Здесь мы не проверяем размер текста, т.к. эти ошибки вернет само API.
      * Теоретически требования к ОТ могут меняться, потому неправильно поддерживать это в клиентской библиотеке
      *
-     * @param $hostID string Host id in webmaster
-     * @param $content string Text to add
+     * @param string $hostID  Host id in webmaster
+     * @param string $content Text to add
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-original-texts-post-docpage/
      *
      * @return object Json
      */
@@ -810,14 +1088,15 @@ class webmasterApi
         return $this->post('/hosts/' . $hostID . '/original-texts/', array('content' => $content));
     }
 
-
     /**
      * Delete existing original text from host
      *
      * Удалить сущестующий ОТ для хоста
      *
-     * @param $hostID string Host id in webmaster
-     * @param $textId string text ID to delete
+     * @param string $hostID  Host id in webmaster
+     * @param string $textId  Text ID to delete
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-original-texts-delete-docpage/
      *
      * @return object Json
      */
@@ -826,9 +1105,29 @@ class webmasterApi
         return $this->delete('/hosts/' . $hostID . '/original-texts/' . urlencode($textId) . '/');
     }
 
-
+    /**
+     * Getting information about external links to the site
+     *
+     * Возвращает примеры внешних ссылок на страницы сайта
+     *
+     * @param string $hostID Host id in webmaster
+     * @param int    $offset
+     * @param int    $limit
+     *
+     * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-links-external-samples-docpage/
+     *
+     * @return object
+     */
     public function getExternalLinks($hostID, $offset = 0, $limit = 100)
     {
+        if (!is_int($offset)) {
+            return $this->errorCritical("Bad offset to {$offset}");
+        }
+
+        if (!is_int($limit) || $limit > 100 || $limit < 0) {
+            return $this->errorCritical("Bad limit to {$limit}");
+        }
+
         return $this->get('/hosts/' . $hostID . '/links/external/samples/', array('offset' => $offset, 'limit' => $limit));
     }
 
@@ -861,10 +1160,10 @@ class webmasterApi
     public static function getAccessToken($code, $clientId, $clientSecret)
     {
         $postData = array(
-            'grant_type' => 'authorization_code',
-            'code' => $code,
-            'client_id' => $clientId,
-            'client_secret' => $clientSecret
+            'grant_type'    => 'authorization_code',
+            'code'          => $code,
+            'client_id'     => $clientId,
+            'client_secret' => $clientSecret,
         );
 
         $ch = curl_init('https://oauth.yandex.ru/token');

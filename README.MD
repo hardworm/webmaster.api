@@ -1,4 +1,4 @@
-# Yandex Webmaster Api v3.2 Library
+# Yandex Webmaster Api v4.0 Library
 
 - [Installation](#installation)
     - [Composer](#composer)
@@ -15,7 +15,7 @@ add into composer.json
 {
     "require": {
         ...
-        "hardworm/webmaster.api": "1.*"
+        "hardworm/webmaster.api": "1.1.*"
         ...
     }
 }
@@ -74,6 +74,7 @@ You can see example/.auth.php to see how it working
 
 * `addHost`
 * `addOriginalText`
+* `addQueueRecrawl`
 * `addSitemap`
 * `checkVerification`
 * `curlOpts`
@@ -86,6 +87,7 @@ You can see example/.auth.php to see how it working
 * `get`
 * `getAccessToken`
 * `getApiUrl`
+* `getDiagnostics`
 * `getHostInfo`
 * `getHostOwners`
 * `getHostSitemaps`
@@ -93,10 +95,17 @@ You can see example/.auth.php to see how it working
 * `getHostUserSitemaps`
 * `getHosts`
 * `getIndexingHistory`
+* `getIndexingSamples`
 * `getOriginalTexts`
 * `getPopularQueries`
-* `getTicHistory`
+* `getQueueRecrawl`
+* `getQuotaRecrawl`
+* `getSearchUrlHistory`
+* `getSearchUrlSamples`
+* `getSearchUrlEventHistory`
+* `getSearchUrlEventHistorySamples`
 * `getSqiHistory`
+* `getStateRecrawlQueue`
 * `getUserID`
 * `initApi`
 * `post`

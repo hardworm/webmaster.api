@@ -12,7 +12,7 @@ require_once(dirname(__FILE__) . "/.init.php");
 use hardworm\webmaster\api\webmasterApi;
 
 // Init webmaster api with your access token
-$wmApi = new webmasterApi($token);
+$wmApi = webmasterApi::initApi($token);
 
 //array with errors (will used in form behind
 $postErrors = array();
@@ -31,7 +31,7 @@ if (!empty($url)) {
     } elseif (empty($ret->host_id)) {
         webmaster_api_example_tpl::err500();
     } else {
-        webmaster_api_example_tpl::redirect('./host.php?host_id=' .$ret->host_id);
+        webmaster_api_example_tpl::redirect('./host.php?host_id=' . $ret->host_id);
     }
 }
 

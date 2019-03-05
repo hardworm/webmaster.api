@@ -58,7 +58,7 @@ if (isset($_REQUEST['delete_sitemap']) && $_REQUEST['delete_sitemap'] === 'true'
 }
 
 // Let's show it
-webmaster_api_example_tpl::init()->header($info->unicode_host_url.' | Info about host');
+webmaster_api_example_tpl::init()->header($info->unicode_host_url . ' | Info about host');
 ?>
 <a href="original_texts.php?host_id=<?= $hostID ?>">Оригинальные тексты</a>
 <a href="search_queries.php?host_id=<?= $hostID ?>">Популярные запросы</a>
@@ -67,7 +67,7 @@ webmaster_api_example_tpl::init()->header($info->unicode_host_url.' | Info about
 <div class="hostinfo">
     <h2>Общая информация</h2>
     <span class="hostinfo_item">
-        Загружено страниц: <?= number_format($summary->downloaded_pages_count, 0, '.', ' ') ?>
+        Индекс качества сайта: <?= number_format($summary->sqi, 0, '.', ' ') ?>
     </span>
     <span class="hostinfo_item">
         Исключено страниц: <?= number_format($summary->excluded_pages_count, 0, '.', ' ') ?>
@@ -75,6 +75,11 @@ webmaster_api_example_tpl::init()->header($info->unicode_host_url.' | Info about
     <span class="hostinfo_item">
         Страниц в поиске: <?= number_format($summary->searchable_pages_count, 0, '.', ' ') ?>
     </span>
+    <?php foreach ($summary->site_problems as $indicator => $siteProblem) :?>
+        <span class="hostinfo_item">
+            Найденных проблем <?= $indicator?>: <?= $siteProblem ?>
+        </span>
+    <?php endforeach; ?>
 </div>
 
 <div class="hostinfo">

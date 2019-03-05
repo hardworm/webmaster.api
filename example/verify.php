@@ -43,7 +43,7 @@ if (isset($_REQUEST['use_method'])) {
 }
 
 // Let's show it
-webmaster_api_example_tpl::init()->header('Verification host '.$hostInfo->unicode_host_url);
+webmaster_api_example_tpl::init()->header('Verification host ' . $hostInfo->unicode_host_url);
 
 if ($verInfo->verification_state !== 'NONE') {
     ?>
