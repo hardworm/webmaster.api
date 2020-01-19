@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpCodeSniffer">
+    <phpcs_settings>
+      <PhpCSConfiguration tool_path="$PROJECT_DIR$/vendor/bin/phpcs" />
+    </phpcs_settings>
+  </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/squizlabs/php_codesniffer" />
+    </include_path>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="5.3.0" />
+  <component name="PhpRuntimeConfiguration" document_root_path="example" />
+</project>

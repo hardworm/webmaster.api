@@ -1,4 +1,4 @@
-# Yandex Webmaster Api v4.0 Library
+# Yandex Webmaster Api v4.1 Library
 
 - [Installation](#installation)
     - [Composer](#composer)

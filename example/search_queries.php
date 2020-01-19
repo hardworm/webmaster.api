@@ -1,10 +1,10 @@
 <?php
+
 /**
  * How to use webmaster api.
  *
  * Original texts
  */
-
 
 // Initializtion: get config and primary classes
 require_once(dirname(__FILE__) . "/.init.php");

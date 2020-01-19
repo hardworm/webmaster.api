@@ -1,13 +1,4 @@
 <?php
-/**
- * PHP-SDK to Yandex Webmaster Api
- *
- * Let me speak from my heart! please
- *
- *
- *
- *
- */
 
 namespace hardworm\webmaster\api;
 
@@ -56,7 +47,7 @@ class webmasterApi
      *
      * @var string
      */
-    private $apiUrl = 'https://api.webmaster.yandex.net/v4';
+    private $apiUrl = 'https://api.webmaster.yandex.net/v4.1';
 
     /**
      * UserID in webmaster
@@ -1030,17 +1021,80 @@ class webmasterApi
      *
      * Получить TOP-500 популярных запросов.
      *
-     * @param string $hostID     Host id in webmaster
-     * @param string $orderBy    Ordering: TOTAL_CLICKS|TOTAL_SHOWS
-     * @param array  $indicators array('TOTAL_SHOWS','TOTAL_CLICKS','AVG_SHOW_POSITION','AVG_CLICK_POSITION')
+     * @param string   $hostID              Host id in webmaster
+     * @param string   $orderBy             Ordering: TOTAL_CLICKS|TOTAL_SHOWS
+     * @param array    $queryIndicator      array('TOTAL_SHOWS','TOTAL_CLICKS','AVG_SHOW_POSITION','AVG_CLICK_POSITION')
+     * @param array    $deviceTypeIndicator Device type array('ALL', 'DESKTOP', 'MOBILE_AND_TABLET', 'MOBILE', 'TABLET') Default value: ALL.
+     * @param null|int $dateFrom            The start date of the range. If omitted, data is returned for the last week
+     * @param null|int $dateTo              The end date of the range. If omitted, data is returned for the last week
+     * @param int      $offset              The list offset. The minimum value is 0. Default value: 0
+     * @param int      $limit               Page size (1-500). Default value: 500
      *
      * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-search-queries-popular-docpage/
      *
      * @return object Json
      */
-    public function getPopularQueries($hostID, $orderBy = 'TOTAL_CLICKS', $indicators = array())
+    public function getPopularQueries($hostID, $orderBy = 'TOTAL_CLICKS', $queryIndicator = array(), $deviceTypeIndicator = array(), $dateFrom = null, $dateTo = null, $offset = 0, $limit = 100)
     {
-        return $this->get('/hosts/' . $hostID . '/search-queries/popular/', array('order_by' => $orderBy, 'query_indicator' => $indicators));
+        return $this->get(
+            '/hosts/' . $hostID . '/search-queries/popular/',
+            array(
+                'order_by'              => $orderBy,
+                'query_indicator'       => $queryIndicator,
+                'device_type_indicator' => $deviceTypeIndicator,
+                'date_from'             => $dateFrom,
+                'date_to'               => $dateTo,
+                'offset'                => $offset,
+                'limit'                 => $limit
+            )
+        );
+    }
+
+    /**
+     * Getting general statistics for all search queries
+     *
+     * Получение общей статистики по всем поисковым запросам
+     *
+     * @param string   $hostID               Host id in webmaster
+     * @param array    $queryIndicators      array('TOTAL_SHOWS', 'TOTAL_CLICKS', 'AVG_SHOW_POSITION', 'AVG_CLICK_POSITION')
+     * @param array    $deviceTypeIndicator  array('ALL', 'DESKTOP', 'MOBILE_AND_TABLET', 'MOBILE', 'TABLET')
+     * @param null|int $dateFrom             Date from in timestamp
+     * @param null|int $dateTo               Date to in timestamp
+     *
+     * @link https://yandex.ru/dev/webmaster/doc/dg/reference/host-search-queries-history-all-docpage/#host-search-queries-history-all
+     *
+     * @return object Json
+     */
+    public function getAllQueries($hostID, $queryIndicators = array(), $deviceTypeIndicator = array(), $dateFrom = null, $dateTo = null)
+    {
+        return $this->get(
+            '/hosts/' . $hostID . '/search-queries/all/history/',
+            array('query_indicator' => $queryIndicators, 'device_type_indicator' => $deviceTypeIndicator, 'date_from' => $dateFrom, 'date_to' => $dateTo)
+        );
+    }
+
+    /**
+     * Getting general statistics for a search query
+     *
+     * Получение общей статистики по поисковому запросу
+     *
+     * @param string   $hostID              Host id in webmaster
+     * @param string   $queryId             Search query ID
+     * @param array    $queryIndicators     array('TOTAL_SHOWS', 'TOTAL_CLICKS', 'AVG_SHOW_POSITION', 'AVG_CLICK_POSITION')
+     * @param array    $deviceTypeIndicator array('ALL', 'DESKTOP', 'MOBILE_AND_TABLET', 'MOBILE', 'TABLET')
+     * @param null|int $dateFrom            Date from in timestamp
+     * @param null|int $dateTo              Date to in timestamp
+     *
+     * @link https://yandex.ru/dev/webmaster/doc/dg/reference/host-search-queries-history-docpage/#host-search-queries-history
+     *
+     * @return object
+     */
+    public function getQueriesById($hostID, $queryId, $queryIndicators = array(), $deviceTypeIndicator = array(), $dateFrom = null, $dateTo = null)
+    {
+        return $this->get(
+            '/hosts/' . $hostID . '/search-queries/' . $queryId . '/',
+            array('query_indicator' => $queryIndicators, 'device_type_indicator' => $deviceTypeIndicator, 'date_from' => $dateFrom, 'date_to' => $dateTo)
+        );
     }
 
     /**
@@ -1111,8 +1165,8 @@ class webmasterApi
      * Возвращает примеры внешних ссылок на страницы сайта
      *
      * @param string $hostID Host id in webmaster
-     * @param int    $offset
-     * @param int    $limit
+     * @param int    $offset Offset in the list. The minimum value is 0. Default value: 0.
+     * @param int    $limit  Page size (1-100). Default value: 10.
      *
      * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-links-external-samples-docpage/
      *
@@ -1129,6 +1183,92 @@ class webmasterApi
         }
 
         return $this->get('/hosts/' . $hostID . '/links/external/samples/', array('offset' => $offset, 'limit' => $limit));
+    }
+
+    /**
+     * Getting information about broken internal links on the site
+     *
+     * Получение информации о неработающих внутренних ссылках сайта
+     *
+     * @param string $hostID    Host id in webmaster
+     * @param array  $indicator The broken link indicator
+     * @param int    $offset    Offset in the list. The minimum value is 0. Default value: 0.
+     * @param int    $limit     Page size (1-100). Default value: 10.
+     *
+     * @link https://yandex.ru/dev/webmaster/doc/dg/reference/host-links-internal-samples-docpage/#host-links-internal-samples
+     *
+     * @return object
+     */
+    public function getBrokenLinks($hostID, array $indicator = array(), $offset = 0, $limit = 100)
+    {
+        if (!is_int($offset)) {
+            return $this->errorCritical("Bad offset to {$offset}");
+        }
+
+        if (!is_int($limit) || $limit > 100 || $limit < 0) {
+            return $this->errorCritical("Bad limit to {$limit}");
+        }
+
+        return $this->get('/hosts/' . $hostID . '/links/internal/broken/samples', array('offset' => $offset, 'limit' => $limit, 'indicator' => $indicator));
+    }
+
+    /**
+     * Getting the history of changes in the number of broken internal links on the site
+     *
+     * Получение истории изменения количества неработающих внутренних ссылок сайта
+     *
+     * @param string $hostID Host id in webmaster
+     * @param int    $offset Offset list. The minimum value is 0
+     * @param int    $limit  Page size (1-100). Default value: 10.
+     *
+     * @link https://yandex.ru/dev/webmaster/doc/dg/reference/host-links-internal-history-docpage/#host-links-internal-history
+     *
+     * @return object
+     */
+    public function getBrokenLinksHistory($hostID, $offset = 0, $limit = 100)
+    {
+        if (!is_int($offset)) {
+            return $this->errorCritical("Bad offset to {$offset}");
+        }
+
+        if (!is_int($limit) || $limit > 100 || $limit < 0) {
+            return $this->errorCritical("Bad limit to {$limit}");
+        }
+
+        return $this->get('/hosts/' . $hostID . '/links/internal/broken/history/', array('offset' => $offset, 'limit' => $limit));
+    }
+
+    /**
+     * Getting the history of changes to an important page
+     *
+     * Мониторинг важных страниц
+     *
+     * @param string $hostID Host id in webmaster
+     *
+     * @link https://yandex.ru/dev/webmaster/doc/dg/reference/host-id-important-urls-docpage/
+     *
+     * @return object
+     */
+    public function getImportantUrls($hostID)
+    {
+        return $this->get('/hosts/' . $hostID . '/important-urls');
+    }
+
+    /**
+     * Getting the history of changes to an important page
+     *
+     * Получение истории изменений важной страницы
+     *
+     * @param string $hostID Host id in webmaster
+     * @param string $url    The URL of the page you want to get information about
+     *
+     * @link https://yandex.ru/dev/webmaster/doc/dg/reference/host-id-important-urls-history-docpage/#host-id-important-urls-history
+     *
+     * @return object
+     */
+    public function getImportantUrlsHistory($hostID, $url)
+    {
+        return $this->get('/hosts/' . $hostID . '/important-urls/history/', array('url' => $url));
     }
 
     /**
