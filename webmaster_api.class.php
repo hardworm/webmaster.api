@@ -1,6 +1,6 @@
 <?php
 
-require_once(realpath(dirname(__FILE__)) . '/src/webmasterApi.php');
+require_once(realpath(__DIR__) . '/src/webmasterApi.php');
 
 /**
  * @deprecated
@@ -12,6 +12,4 @@ require_once(realpath(dirname(__FILE__)) . '/src/webmasterApi.php');
  */
 class webmasterApi extends hardworm\webmaster\api\webmasterApi
 {
-
-
 }

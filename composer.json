@@ -1,6 +1,6 @@
 {
   "name": "hardworm/webmaster.api",
-  "description": "Yandex Webmaster Api v4.0 library",
+  "description": "Yandex Webmaster Api v4.1 library",
   "keywords": [
     "yandex",
     "webmaster",
@@ -30,7 +30,7 @@
     "squizlabs/php_codesniffer": "^3.5"
   },
   "require": {
-    "php": ">=5.3.0",
+    "php": ">=5.4.0",
     "ext-curl": "*",
     "ext-json": "*"
   },
