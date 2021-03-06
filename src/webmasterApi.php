@@ -601,16 +601,23 @@ class webmasterApi
      *
      * @param string $hostID   Host id in webmaster
      * @param string $parentID Id of parent sitemap
+     * @param int $limit limit of sitemaps
+     * @param string $fromSitemapID id starting sitemap (excluded)
      *
      * @link https://tech.yandex.ru/webmaster/doc/dg/reference/host-sitemaps-get-docpage/
      *
      * @return object Json
      */
-    public function getHostSitemaps($hostID, $parentID = null)
+    public function getHostSitemaps($hostID, $parentID = null, $limit = 10, $fromSitemapID = null)
     {
-        $get = array();
+        $get = array(
+            'limit' => $limit,
+        );
         if ($parentID) {
             $get['parent_id'] = $parentID;
+        }
+        if ($fromSitemapID) {
+            $get['from'] = $fromSitemapID;
         }
 
         return $this->get('/hosts/' . $hostID . '/sitemaps/', $get);
